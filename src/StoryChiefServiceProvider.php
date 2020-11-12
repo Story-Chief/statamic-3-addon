@@ -7,9 +7,10 @@ use StoryChief\StoryChief\Helpers\Slug as StoryChiefSlug;
 
 class StoryChiefServiceProvider extends AddonServiceProvider {
 
-  protected $routes = [
-    'web' => __DIR__ . '/../routes/web.php',
-  ];
+  public function boot() {
+    parent::boot();
+    $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+  }
 
   public function register() {
     app()->bind('storychief_slug', function () {
