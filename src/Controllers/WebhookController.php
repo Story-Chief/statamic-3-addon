@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Log;
 use Statamic\Entries\Entry;
 use Statamic\Exceptions\NotFoundHttpException;
 use Statamic\Facades\Entry as EntryService;
+use StoryChief\StoryChief\Events\StoryChiefCreatedEvent;
+use StoryChief\StoryChief\Events\StoryChiefCreatingEvent;
+use StoryChief\StoryChief\Events\StoryChiefDeletedEvent;
+use StoryChief\StoryChief\Events\StoryChiefDeletingEvent;
+use StoryChief\StoryChief\Events\StoryChiefUpdatedEvent;
+use StoryChief\StoryChief\Events\StoryChiefUpdatingEvent;
 use StoryChief\StoryChief\Facades\Slug;
 use StoryChief\StoryChief\StoryChiefMappingHandler;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -61,6 +67,7 @@ class WebhookController {
 
     $slug = Arr::get($this->payload, 'data.seo_slug') ?: Arr::get($this->payload, 'data.title');
 
+    /** @var Entry $entry */
     $entry = EntryService::make();
     $entry->collection(config('storychief.collection'));
     $entry->blueprint(config('storychief.blueprint'));
@@ -70,7 +77,12 @@ class WebhookController {
     $entry->published(TRUE);
 
     $entry = (new StoryChiefMappingHandler($entry, $this->payload))->map();
+
+    StoryChiefCreatingEvent::dispatch($entry, $this->payload);
+
     $entry->save();
+
+    StoryChiefCreatedEvent::dispatch($entry, $this->payload);
 
     return response()->json([
       'id'        => $entry->id(),
@@ -93,7 +105,12 @@ class WebhookController {
     }
 
     $entry = (new StoryChiefMappingHandler($entry, $this->payload))->map();
+
+    StoryChiefUpdatingEvent::dispatch($entry, $this->payload);
+
     $entry->save();
+
+    StoryChiefUpdatedEvent::dispatch($entry, $this->payload);
 
     return response()->json([
       'id'        => $entry->id(),
@@ -110,7 +127,11 @@ class WebhookController {
 
     /** @var Entry $entry */
     if ($entry = EntryService::find($id)) {
-      $entry->delete();
+        StoryChiefDeletingEvent::dispatch($entry, $this->payload);
+
+        $entry->delete();
+
+        StoryChiefDeletedEvent::dispatch($entry, $this->payload);
     }
 
     return response()->json('Ok');
