@@ -161,7 +161,49 @@ class HandleCollectionListener
         }
     }
 }
-
 ```
 
+**Example: set fields depending on the blueprint** 
 
+```
+<?php
+
+namespace App\Listeners;
+
+use StoryChief\StoryChief\Events\StoryChiefCreatingEvent;
+
+class HandleFieldsByBluePrintListener
+{
+    public function handle(StoryChiefCreatingEvent $event)
+    {
+        $entry = $event->entry;
+        $customFields = collect($event->payload['data']['custom_fields']['data'] ?? []);
+        $blueprint = $customFields
+            ->where('key', 'xyz_blueprint_name')
+            ->first()['value'] ?? null;
+            
+        if ($blueprint) {
+            // Alter the blue print programmaticly 
+            $entry->blueprint($blueprint); 
+            
+            // Set fields depending on a different blue print
+            switch($blueprint) {
+                case 'news':
+                    // Map  the title, excerpt, html
+                    $entry->set('title', $event->payload['data']['title']);
+                    $entry->set('excerpt', $event->payload['data']['excerpt']);
+                    $entry->set('html', $event->payload['data']['content']);
+             
+                    $entry->set('banner_title', $customFields->where('key', 'xyz')->first()['value'] ?? null);
+                    $entry->set('banner_text', $customFields->where('key', 'xyz')->first()['value'] ?? null);
+                    $entry->set('read_me', $customFields->where('key', 'xyz')->first()['value'] ?? null);
+                    break;
+                case 'posts':
+                    $entry->set('name', $event->payload['data']['title']);
+                    $entry->set('body', $event->payload['data']['content']);
+                    break;
+            }
+        }
+    }
+}
+```
