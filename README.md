@@ -97,3 +97,71 @@ Set your website's url on your Statamic channel and press save. Your website sho
 ## REQUIREMENTS
 This plugin requires a StoryChief account.
 Not a StoryChief user yet? [Sign up for free](https://app.storychief.io/register)!
+
+## Customize
+
+This addon dispatched several [events](https://laravel.com/docs/8.x/events) so you can listen
+to them when the addon saves or deletes an entry.
+
+- creating: StoryChiefCreatingEvent
+- created: StoryChiefCreatedEvent
+- updating: StoryChiefUpdatingEvent
+- updated: StoryChiefUpdatedEvent
+- deleting: StoryChiefDeletingEvent
+- deleted: StoryChiefDeletedEvent
+
+You can start subscribing by adding a listener in your EventServiceProvider.
+
+```
+<?php 
+
+namespace App\Providers;
+
+...
+use App\Listeners\HandleCollectionListener;
+use StoryChief\StoryChief\Events\StoryChiefCreatingEvent;
+
+class EventServiceProvider extends ServiceProvider
+{
+    protected $listen = [
+        ...
+        StoryChiefCreatingEvent::class => [
+            HandleCollectionListener::class,
+        ]
+    ];
+}
+```
+Next is adding your listener in Laravel, you can for example alter the collection
+based of a custom field value. That is part of the payload send from StoryChief.
+
+1. Add a listener
+2. Your Listener should not interact with the queue
+   1. Remove the interface ShouldQueue and 
+   1. remove the trait InteractsWithQueue after using `php artisan make:event xyz` 
+
+```
+<?php
+
+namespace App\Listeners;
+
+use StoryChief\StoryChief\Events\StoryChiefCreatingEvent;
+
+class HandleCollectionListener
+{
+    public function handle(StoryChiefCreatingEvent $event)
+    {
+        $entry = $event->entry;
+        $collectionValue = collect($event->payload['data']['custom_fields']['data'] ?? [])
+            ->where('key', 'xyz_custom_field_name')
+            ->first();
+
+        if ($collectionValue && $collectionValue['value']) {
+            // Alter the collection based on a custom field value
+            $entry->collection($collectionValue['value']);
+        }
+    }
+}
+
+```
+
+
