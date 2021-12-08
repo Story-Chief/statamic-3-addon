@@ -30,7 +30,7 @@ Once created, add a Statamic channel on your workspace and take note of the encr
 - Publish the configuration file: 
 ```php artisan vendor:publish --tag=storychief-config```
 
-- Set you collection (and blueprint) handle in the foreseen config options, as wel as your field mapping.
+- Set your collection (and blueprint) handle in the foreseen config options, as wel as your field mapping.
 
 #### 3. Disable TrimStrings and ConvertEmptyStringsToNull middleware.
 Laravel (and thus Statamic) will register the Middleware `TrimStrings` and `ConvertEmptyStringsToNull` on a global level by default.
