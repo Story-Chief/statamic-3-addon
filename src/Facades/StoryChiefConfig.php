@@ -5,12 +5,12 @@ namespace StoryChief\StoryChief\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * Class Slug
+ * Class StorychiefConfig
  *
  * @package StoryChief\StoryChief\Facades
- * @method static string unique(string $input) Generates a unique slug.
+ * @method static void set(array $payload)
  */
-class Slug extends Facade
+class StorychiefConfig extends Facade
 {
 
     /**
@@ -18,7 +18,7 @@ class Slug extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return 'storychief_slug';
+        return 'storychief_config';
     }
 
 }

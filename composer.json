@@ -1,43 +1,43 @@
 {
-    "name": "storychief/statamic-storychief",
-    "type": "statamic-addon",
-    "description": "Use StoryChief for collaboration on SEO blogposts, social posts and one-click multichannel distribution.",
-    "keywords": [
-        "statamic",
-        "storychief"
-    ],
-    "homepage": "https://storychief.io",
-    "license": "MIT",
-    "require": {
-        "statamic/cms": "^3.0"
+  "name": "storychief/statamic-storychief",
+  "type": "statamic-addon",
+  "description": "Use StoryChief for collaboration on SEO blogposts, social posts and one-click multichannel distribution.",
+  "keywords": [
+    "statamic",
+    "storychief"
+  ],
+  "homepage": "https://storychief.io",
+  "license": "MIT",
+  "require": {
+    "statamic/cms": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "StoryChief\\StoryChief\\": "src"
+    }
+  },
+  "authors": [
+    {
+      "name": "Gregory Claeyssens",
+      "email": "gregory@storychief.io"
+    }
+  ],
+  "extra": {
+    "statamic": {
+      "name": "StoryChief",
+      "slug": "storychief",
+      "description": "Use StoryChief for collaboration on SEO blogposts, social posts and one-click multichannel distribution.",
+      "version": "1.0.4"
     },
-    "autoload": {
-        "psr-4": {
-            "StoryChief\\StoryChief\\": "src"
-        }
-    },
-    "authors": [
-        {
-            "name": "Gregory Claeyssens",
-            "email": "gregory@storychief.io"
-        }
-    ],
-    "extra": {
-        "statamic": {
-            "name": "StoryChief",
-            "slug": "storychief",
-            "description": "Use StoryChief for collaboration on SEO blogposts, social posts and one-click multichannel distribution.",
-            "version": "1.0.3"
-        },
-        "laravel": {
-            "providers": [
-                "StoryChief\\StoryChief\\StoryChiefServiceProvider"
-            ],
-            "aliases": {
-                "Slug": "StoryChief\\StoryChief\\Facades\\Slug"
-            }
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    "laravel": {
+      "providers": [
+        "StoryChief\\StoryChief\\StoryChiefServiceProvider"
+      ],
+      "aliases": {
+        "Slug": "StoryChief\\StoryChief\\Facades\\Slug"
+      }
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

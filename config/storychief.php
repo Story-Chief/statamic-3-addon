@@ -2,47 +2,47 @@
 
 return [
 
-  /**
-   * Your StoryChief encryption key.
-   * Create a Statamic channel on https://app.storychief.io to get it.
-   */
+    /**
+     * Your StoryChief encryption key.
+     * Create a Statamic channel on https://app.storychief.io to get it.
+     */
   'encryption_key' => env('STORYCHIEF_ENCRYPTION_KEY', ''),
 
-  /**
-   * The collection handle StoryChief should publish to.
-   */
-  'collection'     => NULL,
+    /**
+     * The collection handle StoryChief should publish to.
+     */
+  'collection'     => null,
 
-  /**
-   * The blueprint handle StoryChief should use on your collection.
-   */
-  'blueprint'      => NULL,
+    /**
+     * The blueprint handle StoryChief should use on your collection.
+     */
+  'blueprint'      => null,
 
-  /**
-   * Your field mapping.
-   */
+    /**
+     * Your field mapping.
+     */
   'mapping'        => [
     'title'           => 'title',
     'content'         => 'content',
-    'excerpt'         => NULL,
-    'featured_image'  => NULL,
-    'categories'      => NULL,
-    'tags'            => NULL,
-    'author_email'    => NULL,
-    'author_name'     => NULL,
-    'seo_title'       => NULL,
-    'seo_description' => NULL,
+    'excerpt'         => null,
+    'featured_image'  => null,
+    'categories'      => null,
+    'tags'            => null,
+    'author_email'    => null,
+    'author_name'     => null,
+    'seo_title'       => null,
+    'seo_description' => null,
     'custom_fields'   => [
-      // 'your-custom-field-code' => 'field_handler'
+        // 'your-custom-field-code' => 'field_handler'
     ],
   ],
 
-  /**
-   * Your configured field handlers.
-   * Add addition field handlers by creating a class
-   * implementing StoryChief\StoryChief\FieldHandlers\FieldHandlerInterface.
-   */
-  'fieldtypes' => [
+    /**
+     * Your configured field handlers.
+     * Add addition field handlers by creating a class
+     * implementing StoryChief\StoryChief\FieldHandlers\FieldHandlerInterface.
+     */
+  'fieldtypes'     => [
     'text'     => \StoryChief\StoryChief\FieldHandlers\BaseFieldHandler::class,
     'textarea' => \StoryChief\StoryChief\FieldHandlers\BaseFieldHandler::class,
     'html'     => \StoryChief\StoryChief\FieldHandlers\BaseFieldHandler::class,
