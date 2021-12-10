@@ -4,6 +4,7 @@ namespace StoryChief\StoryChief;
 
 use Statamic\Providers\AddonServiceProvider;
 use StoryChief\StoryChief\Helpers\Slug as StoryChiefSlug;
+use StoryChief\StoryChief\Helpers\Configuration as StoryChiefConfig;
 
 class StoryChiefServiceProvider extends AddonServiceProvider {
 
@@ -15,6 +16,9 @@ class StoryChiefServiceProvider extends AddonServiceProvider {
   public function register() {
     app()->bind('storychief_slug', function () {
       return new StoryChiefSlug();
+    });
+    app()->bind('storychief_config', function () {
+      return new StoryChiefConfig();
     });
   }
 

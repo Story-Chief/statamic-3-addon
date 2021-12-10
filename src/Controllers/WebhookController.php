@@ -11,6 +11,7 @@ use Statamic\Entries\Entry;
 use Statamic\Exceptions\NotFoundHttpException;
 use Statamic\Facades\Entry as EntryService;
 use StoryChief\StoryChief\Facades\Slug;
+use StoryChief\StoryChief\Facades\StorychiefConfig;
 use StoryChief\StoryChief\StoryChiefMappingHandler;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -24,6 +25,8 @@ class WebhookController {
   public function handle(): JsonResponse {
     $this->payload = request()->all();
     $event = Arr::get($this->payload, 'meta.event');
+
+    StorychiefConfig::set($this->payload);
 
     try {
       switch ($event) {
