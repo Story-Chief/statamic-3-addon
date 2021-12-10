@@ -10,13 +10,15 @@ use Illuminate\Support\Facades\Facade;
  * @package StoryChief\StoryChief\Facades
  * @method static void set(array $payload)
  */
-class StorychiefConfig extends Facade {
+class StorychiefConfig extends Facade
+{
 
-  /**
-   * @return string
-   */
-  protected static function getFacadeAccessor(): string  {
-    return 'storychief_config';
-  }
+    /**
+     * @return string
+     */
+    protected static function getFacadeAccessor(): string
+    {
+        return 'storychief_config';
+    }
 
 }

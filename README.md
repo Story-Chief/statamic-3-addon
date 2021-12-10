@@ -19,24 +19,29 @@ Looking for [Statamic 2](https://github.com/Story-Chief/statamic-addon)?
 3. Disable `TrimStrings` and `ConvertEmptyStringsToNull` middleware.
 
 ## HOW IT WORKS
+
 #### 1. Create a Statamic channel
-If you don't already have an account on StoryChief, [sign up](https://app.storychief.io/register)! here.
-Once created, add a Statamic channel on your workspace and take note of the encryption key it gives you.
+
+If you don't already have an account on StoryChief, [sign up](https://app.storychief.io/register)! here. Once created,
+add a Statamic channel on your workspace and take note of the encryption key it gives you.
 
 #### 2. Install addon
- - Install the addon through the Statamic addon manager of your website or by using composer:
- ```composer require storychief/statamic-storychief```
 
-- Publish the configuration file: 
-```php artisan vendor:publish --tag=storychief-config```
+- Install the addon through the Statamic addon manager of your website or by using composer:
+  ```composer require storychief/statamic-storychief```
+
+- Publish the configuration file:
+  ```php artisan vendor:publish --tag=storychief-config```
 
 - Set you collection (and blueprint) handle in the foreseen config options, as wel as your field mapping.
 
 #### 3. Disable TrimStrings and ConvertEmptyStringsToNull middleware.
-Laravel (and thus Statamic) will register the Middleware `TrimStrings` and `ConvertEmptyStringsToNull` on a global level by default.
-These can cause issues when validating the payload as they will manipulate them.
-In order for the addon to work properly it is best to remove both of these middlewares from the global scope and add them back on the appropriate route groups.
-The resulting `App\Http\Kernel` should look similar to: 
+
+Laravel (and thus Statamic) will register the Middleware `TrimStrings` and `ConvertEmptyStringsToNull` on a global level
+by default. These can cause issues when validating the payload as they will manipulate them. In order for the addon to
+work properly it is best to remove both of these middlewares from the global scope and add them back on the appropriate
+route groups. The resulting `App\Http\Kernel` should look similar to:
+
 ```
 <?php
 
@@ -91,9 +96,10 @@ class Kernel extends HttpKernel
 ```
 
 #### 4. Confirm
+
 Set your website's url on your Statamic channel and press save. Your website should now be connected.
 
-
 ## REQUIREMENTS
-This plugin requires a StoryChief account.
-Not a StoryChief user yet? [Sign up for free](https://app.storychief.io/register)!
+
+This plugin requires a StoryChief account. Not a StoryChief user
+yet? [Sign up for free](https://app.storychief.io/register)!

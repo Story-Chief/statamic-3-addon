@@ -7,9 +7,11 @@ use Statamic\Entries\Entry;
 
 class StoryChiefUpdatingEvent
 {
+
     use Dispatchable;
 
     public $entry;
+
     public $payload;
 
     public function __construct(Entry $entry, array $payload)
@@ -17,4 +19,5 @@ class StoryChiefUpdatingEvent
         $this->entry = $entry;
         $this->payload = $payload;
     }
+
 }

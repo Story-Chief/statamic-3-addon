@@ -10,60 +10,74 @@ use Statamic\Facades\AssetContainer;
 use Statamic\Fields\Field;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class AssetFieldHandler extends BaseFieldHandler {
+class AssetFieldHandler extends BaseFieldHandler
+{
 
-  /** @var string */
-  public $file_name;
+    /** @var string */
+    public $file_name;
 
-  /**
-   * @inheritdoc
-   */
-  public function __construct(Entry $entry, Field $field, array $payload, $payload_value) {
-    parent::__construct($entry, $field, $payload, $payload_value);
+    /**
+     * @inheritdoc
+     */
+    public function __construct(
+      Entry $entry,
+      Field $field,
+      array $payload,
+      $payload_value
+    ) {
+        parent::__construct($entry, $field, $payload, $payload_value);
 
-    $this->file_name = basename($payload_value);
-  }
-
-  /**
-   * @inheritdoc
-   *
-   * @return string|null
-   */
-  public function getValue(): ?string {
-    if (!filter_var($this->payload_value, FILTER_VALIDATE_URL)) {
-      return NULL;
+        $this->file_name = basename($payload_value);
     }
 
-    $assetContainer = AssetContainer::findByHandle(Arr::get($this->field->config(),'container'));
+    /**
+     * @inheritdoc
+     *
+     * @return string|null
+     */
+    public function getValue(): ?string
+    {
+        if (!filter_var($this->payload_value, FILTER_VALIDATE_URL)) {
+            return null;
+        }
 
-    /** @var \Statamic\Assets\Asset $asset */
-    $asset = Asset::make();
-    $asset->container($assetContainer);
-    $asset->path('img/sc/'); //Arr::get($this->field->config(),'folder'));
+        $assetContainer = AssetContainer::findByHandle(
+          Arr::get($this->field->config(), 'container')
+        );
 
-    $path = $this->createTempFile();
-    $uploaded_file = new UploadedFile($path, $this->file_name);
-    $asset->upload($uploaded_file)->save();
+        /** @var \Statamic\Assets\Asset $asset */
+        $asset = Asset::make();
+        $asset->container($assetContainer);
+        $asset->path('img/sc/'); //Arr::get($this->field->config(),'folder'));
 
-    $this->deleteTempFile();
+        $path = $this->createTempFile();
+        $uploaded_file = new UploadedFile($path, $this->file_name);
+        $asset->upload($uploaded_file)->save();
 
-    return $asset->url();
-  }
+        $this->deleteTempFile();
 
-  /**
-   * @return string
-   */
-  protected function createTempFile(): string {
-    Storage::disk('local')->put($this->file_name, file_get_contents($this->payload_value));
+        return $asset->url();
+    }
 
-    return realpath(storage_path("/app/$this->file_name"));
-  }
+    /**
+     * @return string
+     */
+    protected function createTempFile(): string
+    {
+        Storage::disk('local')->put(
+          $this->file_name,
+          file_get_contents($this->payload_value)
+        );
 
-  /**
-   * @return void
-   */
-  protected function deleteTempFile(): void {
-    Storage::disk('local')->delete($this->file_name);
-  }
+        return realpath(storage_path("/app/$this->file_name"));
+    }
+
+    /**
+     * @return void
+     */
+    protected function deleteTempFile(): void
+    {
+        Storage::disk('local')->delete($this->file_name);
+    }
 
 }

@@ -2,19 +2,21 @@
 
 namespace StoryChief\StoryChief\FieldHandlers;
 
-class LinkFieldHandler extends BaseFieldHandler {
+class LinkFieldHandler extends BaseFieldHandler
+{
 
-  /**
-   * @inheritdoc
-   *
-   * @return string|null
-   */
-  public function getValue(): ?string {
-    if (filter_var($this->payload_value, FILTER_VALIDATE_URL)) {
-      return $this->payload_value;
+    /**
+     * @inheritdoc
+     *
+     * @return string|null
+     */
+    public function getValue(): ?string
+    {
+        if (filter_var($this->payload_value, FILTER_VALIDATE_URL)) {
+            return $this->payload_value;
+        }
+
+        return null;
     }
-
-    return NULL;
-  }
 
 }

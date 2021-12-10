@@ -21,130 +21,150 @@ use StoryChief\StoryChief\Facades\StorychiefConfig;
 use StoryChief\StoryChief\StoryChiefMappingHandler;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class WebhookController {
+class WebhookController
+{
 
-  protected $payload = [];
+    protected $payload = [];
 
-  /**
-   * @return \Illuminate\Http\JsonResponse
-   */
-  public function handle(): JsonResponse {
-    $this->payload = request()->all();
-    $event = Arr::get($this->payload, 'meta.event');
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function handle(): JsonResponse
+    {
+        $this->payload = request()->all();
+        $event = Arr::get($this->payload, 'meta.event');
 
-    StorychiefConfig::set($this->payload);
+        StorychiefConfig::set($this->payload);
 
-    try {
-      switch ($event) {
-        case 'publish':
-          return $this->handlePublishEvent();
-        case 'update':
-          return $this->handleUpdateEvent();
-        case 'delete':
-          return $this->handleDeleteEvent();
-        case 'test':
-          return $this->handleTestEvent();
-        default:
-          throw new BadRequestHttpException("Could not understand event '$event'");
-      }
-    }
-    catch (Exception $e) {
-      Log::error($e);
+        try {
+            switch ($event) {
+                case 'publish':
+                    return $this->handlePublishEvent();
+                case 'update':
+                    return $this->handleUpdateEvent();
+                case 'delete':
+                    return $this->handleDeleteEvent();
+                case 'test':
+                    return $this->handleTestEvent();
+                default:
+                    throw new BadRequestHttpException(
+                      "Could not understand event '$event'"
+                    );
+            }
+        } catch (Exception $e) {
+            Log::error($e);
 
-      return response()->json([
-        'errors'    => 'Sorry, something went wrong.',
-        'exception' => get_class($e),
-        'message'   => $e->getMessage(),
-        'trace'     => $e->getTrace(),
-      ], $e->getCode() ?: 500);
-    }
-  }
-
-  /**
-   * @return \Illuminate\Http\JsonResponse
-   * @throws \ReflectionException
-   * @throws \StoryChief\StoryChief\Exceptions\InvalidFieldHandleException
-   * @throws \StoryChief\StoryChief\Exceptions\InvalidFieldTypeException
-   */
-  protected function handlePublishEvent(): JsonResponse {
-
-    $slug = Arr::get($this->payload, 'data.seo_slug') ?: Arr::get($this->payload, 'data.title');
-
-    /** @var Entry $entry */
-    $entry = EntryService::make();
-    $entry->collection(config('storychief.collection'));
-    $entry->blueprint(config('storychief.blueprint'));
-    $entry->slug(Slug::unique($slug));
-    $entry->locale(request()->get('data.language'));
-    $entry->date(Carbon::now());
-    $entry->published(TRUE);
-
-    $entry = (new StoryChiefMappingHandler($entry, $this->payload))->map();
-
-    StoryChiefCreatingEvent::dispatch($entry, $this->payload);
-
-    $entry->save();
-
-    StoryChiefCreatedEvent::dispatch($entry, $this->payload);
-
-    return response()->json([
-      'id'        => $entry->id(),
-      'permalink' => $entry->absoluteUrl(),
-    ]);
-  }
-
-  /**
-   * @return \Illuminate\Http\JsonResponse
-   * @throws \ReflectionException
-   * @throws \StoryChief\StoryChief\Exceptions\InvalidFieldHandleException
-   * @throws \StoryChief\StoryChief\Exceptions\InvalidFieldTypeException
-   */
-  protected function handleUpdateEvent(): JsonResponse {
-    $id = Arr::get($this->payload, 'data.external_id');
-
-    /** @var Entry $entry */
-    if (!$entry = EntryService::find($id)) {
-      throw new NotFoundHttpException("Could not find an entry with id $id", null, 404);
+            return response()->json(
+              [
+                'errors'    => 'Sorry, something went wrong.',
+                'exception' => get_class(
+                  $e
+                ),
+                'message'   => $e->getMessage(),
+                'trace'     => $e->getTrace(),
+              ],
+              $e->getCode() ?: 500
+            );
+        }
     }
 
-    $entry = (new StoryChiefMappingHandler($entry, $this->payload))->map();
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \ReflectionException
+     * @throws \StoryChief\StoryChief\Exceptions\InvalidFieldHandleException
+     * @throws \StoryChief\StoryChief\Exceptions\InvalidFieldTypeException
+     */
+    protected function handlePublishEvent(): JsonResponse
+    {
+        $slug = Arr::get($this->payload, 'data.seo_slug') ?: Arr::get(
+          $this->payload,
+          'data.title'
+        );
 
-    StoryChiefUpdatingEvent::dispatch($entry, $this->payload);
+        /** @var Entry $entry */
+        $entry = EntryService::make();
+        $entry->collection(config('storychief.collection'));
+        $entry->blueprint(config('storychief.blueprint'));
+        $entry->slug(Slug::unique($slug));
+        $entry->locale(request()->get('data.language'));
+        $entry->date(Carbon::now());
+        $entry->published(true);
 
-    $entry->save();
+        $entry = (new StoryChiefMappingHandler($entry, $this->payload))->map();
 
-    StoryChiefUpdatedEvent::dispatch($entry, $this->payload);
+        StoryChiefCreatingEvent::dispatch($entry, $this->payload);
 
-    return response()->json([
-      'id'        => $entry->id(),
-      'permalink' => $entry->absoluteUrl(),
-    ]);
-  }
+        $entry->save();
 
-  /**
-   * @return \Illuminate\Http\JsonResponse
-   * @throws \Exception
-   */
-  protected function handleDeleteEvent(): JsonResponse {
-    $id = Arr::get($this->payload, 'data.external_id');
+        StoryChiefCreatedEvent::dispatch($entry, $this->payload);
 
-    /** @var Entry $entry */
-    if ($entry = EntryService::find($id)) {
-        StoryChiefDeletingEvent::dispatch($entry, $this->payload);
-
-        $entry->delete();
-
-        StoryChiefDeletedEvent::dispatch($entry, $this->payload);
+        return response()->json(
+          [
+            'id'        => $entry->id(),
+            'permalink' => $entry->absoluteUrl(),
+          ]
+        );
     }
 
-    return response()->json('Ok');
-  }
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \ReflectionException
+     * @throws \StoryChief\StoryChief\Exceptions\InvalidFieldHandleException
+     * @throws \StoryChief\StoryChief\Exceptions\InvalidFieldTypeException
+     */
+    protected function handleUpdateEvent(): JsonResponse
+    {
+        $id = Arr::get($this->payload, 'data.external_id');
 
-  /**
-   * @return \Illuminate\Http\JsonResponse
-   */
-  protected function handleTestEvent(): JsonResponse {
-    return response()->json('Ok');
-  }
+        /** @var Entry $entry */
+        if (!$entry = EntryService::find($id)) {
+            throw new NotFoundHttpException(
+              "Could not find an entry with id $id", null, 404
+            );
+        }
+
+        $entry = (new StoryChiefMappingHandler($entry, $this->payload))->map();
+
+        StoryChiefUpdatingEvent::dispatch($entry, $this->payload);
+
+        $entry->save();
+
+        StoryChiefUpdatedEvent::dispatch($entry, $this->payload);
+
+        return response()->json(
+          [
+            'id'        => $entry->id(),
+            'permalink' => $entry->absoluteUrl(),
+          ]
+        );
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    protected function handleDeleteEvent(): JsonResponse
+    {
+        $id = Arr::get($this->payload, 'data.external_id');
+
+        /** @var Entry $entry */
+        if ($entry = EntryService::find($id)) {
+            StoryChiefDeletingEvent::dispatch($entry, $this->payload);
+
+            $entry->delete();
+
+            StoryChiefDeletedEvent::dispatch($entry, $this->payload);
+        }
+
+        return response()->json('Ok');
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function handleTestEvent(): JsonResponse
+    {
+        return response()->json('Ok');
+    }
 
 }

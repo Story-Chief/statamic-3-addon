@@ -10,13 +10,15 @@ use Illuminate\Support\Facades\Facade;
  * @package StoryChief\StoryChief\Facades
  * @method static string unique(string $input) Generates a unique slug.
  */
-class Slug extends Facade {
+class Slug extends Facade
+{
 
-  /**
-   * @return string
-   */
-  protected static function getFacadeAccessor(): string {
-    return 'storychief_slug';
-  }
+    /**
+     * @return string
+     */
+    protected static function getFacadeAccessor(): string
+    {
+        return 'storychief_slug';
+    }
 
 }
