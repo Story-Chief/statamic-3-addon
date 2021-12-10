@@ -15,7 +15,7 @@ class Slug extends Facade {
   /**
    * @return string
    */
-  protected static function getFacadeAccessor() {
+  protected static function getFacadeAccessor(): string {
     return 'storychief_slug';
   }
 

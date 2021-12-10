@@ -7,8 +7,7 @@ use Statamic\Facades\Entry;
 
 class Slug {
 
-  public function unique(string $input)
-  {
+  public function unique(string $input): string {
     $unique_slug = $slug = $this->sanitize($input);
 
     while (Entry::findBySlug($unique_slug, config('storychief.collection')) !== null) {
@@ -23,7 +22,7 @@ class Slug {
    *
    * @return string
    */
-  protected function sanitize(string $slug) {
+  protected function sanitize(string $slug): string {
     return Str::slug($slug, '-');
   }
 
