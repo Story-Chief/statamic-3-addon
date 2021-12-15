@@ -5,12 +5,12 @@ namespace StoryChief\StoryChief\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * Class StorychiefConfig
+ * Class StoryChiefConfig
  *
  * @package StoryChief\StoryChief\Facades
  * @method static void set(array $payload)
  */
-class StorychiefConfig extends Facade
+class StoryChiefConfig extends Facade
 {
 
     /**

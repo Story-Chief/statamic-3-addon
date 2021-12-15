@@ -17,7 +17,7 @@ use StoryChief\StoryChief\Events\StoryChiefDeletingEvent;
 use StoryChief\StoryChief\Events\StoryChiefUpdatedEvent;
 use StoryChief\StoryChief\Events\StoryChiefUpdatingEvent;
 use StoryChief\StoryChief\Facades\Slug;
-use StoryChief\StoryChief\Facades\StorychiefConfig;
+use StoryChief\StoryChief\Facades\StoryChiefConfig;
 use StoryChief\StoryChief\StoryChiefMappingHandler;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -34,7 +34,7 @@ class WebhookController
         $this->payload = request()->all();
         $event = Arr::get($this->payload, 'meta.event');
 
-        StorychiefConfig::set($this->payload);
+        StoryChiefConfig::set($this->payload);
 
         try {
             switch ($event) {
