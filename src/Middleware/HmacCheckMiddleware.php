@@ -21,7 +21,7 @@ class HmacCheckMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $payload = $request->all();
+        $payload = $request->post();
 
         $given_mac = Arr::pull($payload, 'meta.mac');
         $calc_mac = hash_hmac(
