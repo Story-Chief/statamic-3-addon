@@ -48,7 +48,7 @@ class AssetFieldHandler extends BaseFieldHandler
         /** @var \Statamic\Assets\Asset $asset */
         $asset = Asset::make();
         $asset->container($assetContainer);
-        $asset->path('img/sc/'); //Arr::get($this->field->config(),'folder'));
+        $asset->path(ltrim($assetContainer->url(),"/")); // Set it to the disk folder of the container.
 
         $path = $this->createTempFile();
         $uploaded_file = new UploadedFile($path, $this->file_name);
@@ -56,7 +56,7 @@ class AssetFieldHandler extends BaseFieldHandler
 
         $this->deleteTempFile();
 
-        return $asset->url();
+        return $asset->path();
     }
 
     /**
