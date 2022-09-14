@@ -27,7 +27,7 @@
       "name": "StoryChief",
       "slug": "storychief",
       "description": "Use StoryChief for collaboration on SEO blogposts, social posts and one-click multichannel distribution.",
-      "version": "1.0.6"
+      "version": "1.0.7"
     },
     "laravel": {
       "providers": [
