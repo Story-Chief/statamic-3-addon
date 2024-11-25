@@ -12,10 +12,10 @@ class Slug
     {
         $unique_slug = $slug = $this->sanitize($input);
 
-        while (Entry::findBySlug(
-            $unique_slug,
-            config('storychief.collection')
-          ) !== null) {
+        while (Entry::query()
+            ->where('collection', config('storychief.collection'))
+            ->where('slug', $unique_slug)
+            ->first() !== null) {
             $unique_slug = $slug . '-' . Str::random(6);
         }
 
