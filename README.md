@@ -6,12 +6,6 @@ Connect your Statamic website to [StoryChief](https://storychief.io) and publish
 
 Looking for [Statamic 2](https://github.com/Story-Chief/statamic-addon)?
 
-**This plugin:**
-
-* Publishes articles straight from StoryChief
-* Keeps your formatting like header tags, bold, links, lists etc
-* Does not alter your website’s branding, by using your site’s CSS for styling
-
 ## Installation
 
 1. Add the addon through the addon manager or `composer require storychief/statamic-storychief`
