@@ -8,6 +8,10 @@ Route::post(
   config('statamic.routes.action') . '/StoryChief/webhook',
   [StoryChiefWebhookController::class, 'handle']
 )
+  ->withoutMiddleware([
+      \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
+      \Illuminate\Foundation\Http\Middleware\TrimStrings::class,
+  ])
   ->middleware(
     [
       StoryChiefHmacCheckMiddleware::class,
