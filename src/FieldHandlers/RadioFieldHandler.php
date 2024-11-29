@@ -19,13 +19,19 @@ class RadioFieldHandler extends BaseFieldHandler
         ) ? $this->payload_value[0] : $this->payload_value;
         $options = Arr::get($this->field->config(), 'options', []);
 
-        return Arr::first(
-          array_keys($options),
-          function ($option) use ($value) {
-              return $option === $value;
-          },
-          null
-        );
+        foreach ($options as $option) {
+            if (is_array($option)) {
+                if ($value === $option['value']) {
+                    return $option['key'];
+                }
+            } else {
+                if ($value === $option) {
+                    return $option;
+                }
+            }
+        }
+
+        return null;
     }
 
 }

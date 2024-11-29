@@ -41,7 +41,24 @@ class SelectFieldHandler extends BaseFieldHandler
     {
         $options = Arr::get($this->field->config(), 'options', []);
 
-        return array_intersect(array_keys($options), $values);
+        return array_filter(
+            array_map(function ($value) use ($options) {
+
+                foreach ($options as $option) {
+                    if (is_array($option)) {
+                        if ($option['value'] === $value) {
+                            return $option['key'];
+                        }
+                    } else {
+                        if ($option === $value) {
+                            return $option;
+                        }
+                    }
+                }
+
+                return null;
+            }, $values)
+        );
     }
 
 }

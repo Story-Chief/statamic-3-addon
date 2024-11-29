@@ -52,6 +52,7 @@ return [
     'date'     => \StoryChief\StoryChief\FieldHandlers\DateFieldHandler::class,
     'link'     => \StoryChief\StoryChief\FieldHandlers\LinkFieldHandler::class,
     'radio'    => \StoryChief\StoryChief\FieldHandlers\RadioFieldHandler::class,
+    'checkboxes' => \StoryChief\StoryChief\FieldHandlers\CheckboxesFieldHandler::class,
     'select'   => \StoryChief\StoryChief\FieldHandlers\SelectFieldHandler::class,
     'terms'    => \StoryChief\StoryChief\FieldHandlers\TermsFieldHandler::class,
     'users'    => \StoryChief\StoryChief\FieldHandlers\UserFieldHandler::class,
