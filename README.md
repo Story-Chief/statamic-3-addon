@@ -1,4 +1,4 @@
-# StoryChief addon for Statamic 3
+# StoryChief Plugin for Statamic
 
 ## Description
 
